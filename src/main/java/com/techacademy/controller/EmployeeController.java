@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.techacademy.constants.ErrorKinds;
 import com.techacademy.constants.ErrorMessage;
@@ -110,6 +111,48 @@ public class EmployeeController {
             return detail(code, model);
         }
 
+        return "redirect:/employees";
+    }
+
+    // lessen34 チャプター６ 追加更新処理 画面遷移
+    @GetMapping("/{code}/update")
+    public String getEmployee(@PathVariable(name = "code", required = false) String code, Model model) {
+        Employee employee = employeeService.findByCode(code);
+        model.addAttribute("employee", employee);
+        return "employees/update";
+    }
+
+   /* @PostMapping("/{code}/update")
+    public String update(@ModelAttribute Employee employee) {
+
+        return "employees/update";
+    }
+*/
+    // 更新ページ＋エラーメッセージ
+    @PostMapping("/{code}/update")
+
+
+    public String updateEmployee(@Validated Employee employee, BindingResult res, Model model) {
+        if (res.hasErrors()) {
+        //    return getEmployee(null, model);
+
+            return "redirect:/employees";
+        }
+
+        try {
+            ErrorKinds result = employeeService.save(employee);
+
+            if (ErrorMessage.contains(result)) {
+                model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
+                return getEmployee(null, model);
+            }
+
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
+                    ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
+            return getEmployee(null, model);
+        }
+        employeeService.save(employee);;
         return "redirect:/employees";
     }
 
