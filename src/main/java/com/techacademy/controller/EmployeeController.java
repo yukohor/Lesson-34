@@ -115,28 +115,33 @@ public class EmployeeController {
     }
 
     // lessen34 チャプター６ 追加更新処理 画面遷移
-    @GetMapping("/{code}/update")
-    public String getEmployee(@PathVariable(name = "code", required = false) String code, Model model) {
-        Employee employee = employeeService.findByCode(code);
-        model.addAttribute("employee", employee);
-        return "employees/update";
-    }
+    /*
+     * @GetMapping("/{code}/update") public String update(@PathVariable(name =
+     * "code", required = false) String code, Model model) { Employee employee =
+     * employeeService.findByCode(code); model.addAttribute("employee", employee);
+     * return "employees/update"; }
+     */
 
-   /* @PostMapping("/{code}/update")
+    // 更新ページ＋エラーメッセージ
+    @GetMapping("/{code}/update")
     public String update(@ModelAttribute Employee employee) {
 
         return "employees/update";
     }
-*/
-    // 更新ページ＋エラーメッセージ
+
     @PostMapping("/{code}/update")
-
-
     public String updateEmployee(@Validated Employee employee, BindingResult res, Model model) {
-        if (res.hasErrors()) {
-        //    return getEmployee(null, model);
+        if ("".equals(employee.getPassword())) {
+            // パスワードが空白だった場合
+            model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.BLANK_ERROR),
+                    ErrorMessage.getErrorValue(ErrorKinds.BLANK_ERROR));
 
-            return "redirect:/employees";
+            return update(employee);
+        }
+        if (res.hasErrors()) {
+            // return getEmployee(null, model);
+
+            return update(employee);
         }
 
         try {
@@ -144,15 +149,16 @@ public class EmployeeController {
 
             if (ErrorMessage.contains(result)) {
                 model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
-                return getEmployee(null, model);
+                return update(employee);
             }
 
         } catch (DataIntegrityViolationException e) {
             model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
                     ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
-            return getEmployee(null, model);
+            return update(employee);
         }
-        employeeService.save(employee);;
+        employeeService.save(employee);
+        ;
         return "redirect:/employees";
     }
 
