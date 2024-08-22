@@ -115,19 +115,23 @@ public class EmployeeController {
     }
 
     // lessen34 チャプター６ 追加更新処理 画面遷移
-    /*
-     * @GetMapping("/{code}/update") public String update(@PathVariable(name =
-     * "code", required = false) String code, Model model) { Employee employee =
-     * employeeService.findByCode(code); model.addAttribute("employee", employee);
-     * return "employees/update"; }
-     */
+
+     @GetMapping("/{code}/update") public String update(@PathVariable(name ="code", required = false) String code, Model model, Employee employee) {
+         if(code == null) {
+             model.addAttribute("employee",employeeService.getEmployee(code));
+             return "employees/update";
+         }
+
+         model.addAttribute("employee", employeeService.findByCode(code));
+         return "employees/update";
+     }
 
     // 更新ページ＋エラーメッセージ
-    @GetMapping("/{code}/update")
+   /* @GetMapping("/{code}/update")
     public String update(@ModelAttribute Employee employee) {
 
         return "employees/update";
-    }
+    }*/
 
     @PostMapping("/{code}/update")
     public String updateEmployee(@Validated Employee employee, BindingResult res, Model model) {
@@ -136,12 +140,12 @@ public class EmployeeController {
             model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.BLANK_ERROR),
                     ErrorMessage.getErrorValue(ErrorKinds.BLANK_ERROR));
 
-            return update(employee);
+            return update(null, model, employee);
         }
         if (res.hasErrors()) {
             // return getEmployee(null, model);
 
-            return update(employee);
+            return update(null, model,employee);
         }
 
         try {
@@ -149,17 +153,15 @@ public class EmployeeController {
 
             if (ErrorMessage.contains(result)) {
                 model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
-                return update(employee);
+                return update(null, model,employee);
             }
 
         } catch (DataIntegrityViolationException e) {
             model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
                     ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
-            return update(employee);
+            return update(null, model,employee);
         }
-        employeeService.save(employee);
-        ;
-        return "redirect:/employees";
+        return "redirect:/employees/list";
     }
 
 }
