@@ -32,8 +32,9 @@ public class EmployeeService {
     public ErrorKinds save(Employee employee) {
 
         // パスワードチェック
+
         ErrorKinds result = employeePasswordCheck(employee);
-        if (ErrorKinds.CHECK_OK != result) {
+       if (ErrorKinds.CHECK_OK != result) {
             return result;
         }
 
@@ -52,6 +53,9 @@ public class EmployeeService {
         return ErrorKinds.SUCCESS;
     }
 
+
+
+
     // 従業員削除
     @Transactional
     public ErrorKinds delete(String code, UserDetail userDetail) {
@@ -67,11 +71,35 @@ public class EmployeeService {
 
         return ErrorKinds.SUCCESS;
     }
+    //従業員更新
+    @Transactional
+    public ErrorKinds update(Employee employee) {
+        ErrorKinds result = employeePasswordCheck(employee);
+        if (ErrorKinds.CHECK_OK != result) {
+             return result;
+         }
+         employee.setDeleteFlg(false);
+
+         LocalDateTime now = LocalDateTime.now();
+         employee.setCreatedAt(now);
+         employee.setUpdatedAt(now);
+
+         employeeRepository.save(employee);
+         return ErrorKinds.SUCCESS;
+
+    }
 
     // 従業員一覧表示処理
     public List<Employee> findAll() {
         return employeeRepository.findAll();
     }
+
+    //更新用　
+
+   public Employee getEmployee(String code) {
+       return employeeRepository.findById(code).get();
+   }
+
 
     // 1件を検索
     public Employee findByCode(String code) {
@@ -118,6 +146,7 @@ public class EmployeeService {
         int passwordLength = employee.getPassword().length();
         return passwordLength < 8 || 16 < passwordLength;
     }
+
 
 
 

@@ -50,9 +50,12 @@
                                 </table>
                                 <div class="mt-5 row g-1">
                                     <div class="col-auto">
-                                        <form name="form" th:action="@{/employees/{code}/update(code=${code})}" th:method="get">
-                                            <input type="submit" value="更新" class="btn btn-primary">
-                                        </form>
+
+                                    <form name="form" th:action="@{/employees/{code}/update(code=${employee.code})}"
+                                            th:method="get">
+                                       <input type="submit" value="更新" class="btn btn-primary">
+
+
                                     </div>
                                     <div class="col-auto">
                                         <form name="form" th:action="@{/employees/{code}/delete(code=${code})}"
