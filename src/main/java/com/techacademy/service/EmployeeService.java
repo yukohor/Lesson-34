@@ -71,6 +71,7 @@ public class EmployeeService {
 
         return ErrorKinds.SUCCESS;
     }
+
     //従業員更新
     @Transactional
     public ErrorKinds update(Employee employee) {
