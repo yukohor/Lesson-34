@@ -8,7 +8,7 @@
         </li>
         <!--日報一覧完成後修正-->
          <li sec:authorize="hasAuthority('ADMIN')">
-            <a class="text-light" th:href="@{/employees}">日報</a>
+            <a class="text-light" th:href="@{/reports}">日報</a>
         </li>
     </ul>
     <form method="post" th:action="@{/logout}">

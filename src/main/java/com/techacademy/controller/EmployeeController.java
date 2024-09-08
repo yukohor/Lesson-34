@@ -45,7 +45,6 @@ public class EmployeeController {
     // 従業員詳細画面
     @GetMapping(value = "/{code}/")
     public String detail(@PathVariable String code, Model model) {
-
         model.addAttribute("employee", employeeService.findByCode(code));
         return "employees/detail";
     }
@@ -114,7 +113,7 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
-    // lessen34 チャプター６ 追加更新処理 画面遷移
+    // 更新処理 画面遷移
     @GetMapping(value = "/{code}/update")
     public String getEmployee(@PathVariable("code") String code, Model model, Employee employee) {
         if (code == null) {
