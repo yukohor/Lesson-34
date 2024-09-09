@@ -11,7 +11,7 @@
 
         <div class="mt-3 h-100 col-sm-10">
             <div class="container-fluid p-0">
-                 <h1 class="h3 mb-3">日報情報詳細</h1>
+                 <h1 class="h3 mb-3">日報 詳細</h1>
             </div>
 
             <div class="mb-3 col-12 col-xxl-6">
@@ -46,7 +46,8 @@
                                     </tr>
                                     <tr>
                                         <th>更新日時</th>
-                                        <td class="align-middle" th:text="${#temporals.format(report.updatedAt, 'yyyy-MM-dd HH:mm:ss')}">
+                                        <td class="align-middle"
+                                        th:text="${#temporals.format(report.updatedAt, 'yyyy-MM-dd HH:mm:ss')}">
                                         </td>
                                     </tr>
                                 </table>

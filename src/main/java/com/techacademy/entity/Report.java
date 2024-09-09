@@ -40,7 +40,6 @@ public class Report {
 
 
 
-
   //日付
     @Column(nullable = false)
     @NotNull
@@ -74,5 +73,3 @@ public class Report {
     private LocalDateTime updatedAt;
 
     }
-
-

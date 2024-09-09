@@ -26,6 +26,7 @@ public class UserDetail implements UserDetails {
 
     public Employee getEmployee() {
         return employee;
+
     }
 
     @Override
@@ -37,10 +38,10 @@ public class UserDetail implements UserDetails {
     public String getPassword() {
         return employee.getPassword();
     }
-
+//変更した
     @Override
     public String getUsername() {
-        return employee.getCode();
+        return employee.getName();
     }
 
     @Override

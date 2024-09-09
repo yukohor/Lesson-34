@@ -1,11 +1,13 @@
 
 package com.techacademy.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -16,6 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -23,7 +26,7 @@ import lombok.Data;
 @Table(name = "employees")
 @SQLRestriction("delete_flg = false")
 public class Employee {
-    
+
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Report> reportList;
 
@@ -47,6 +50,8 @@ public class Employee {
     @NotEmpty
     @Length(max = 10)
     private String code;
+
+
 
     // 名前
     @Column(length = 20, nullable = false)

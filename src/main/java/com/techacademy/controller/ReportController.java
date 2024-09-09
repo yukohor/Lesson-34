@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.techacademy.constants.ErrorKinds;
@@ -36,7 +35,7 @@ public class ReportController {
 
     // 日報一覧画面
     @GetMapping
-    public String list(Employee employee, Model model) {
+    public String list(Model model) {
 
         model.addAttribute("listSize", reportService.findAll().size());
         model.addAttribute("reportList", reportService.findAll());
@@ -54,18 +53,19 @@ public class ReportController {
 
     // 日報新規登録画面
     @GetMapping(value = "/add")
-    public String create(@ModelAttribute Report report) {
-
+    public String create(@ModelAttribute Report report,@AuthenticationPrincipal UserDetail userDetail,Model model) {
+        model.addAttribute("username", userDetail.getUsername());
         return "reports/new";
     }
 
     @PostMapping(value = "/add")
-    public String add(@Validated Report report, BindingResult res, Model model) {
+    public String add(@Validated Report report, BindingResult res, Model model,UserDetail userDetail) {
         if (res.hasErrors()) {
-            return create(report);
+            return create(report, null,model);
         }
 
-        reportService.save(report);
+        reportService.save(report,userDetail);
+
         return "redirect:/reports";
     }
 

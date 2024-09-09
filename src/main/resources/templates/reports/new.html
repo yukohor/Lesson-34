@@ -19,9 +19,10 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-body">
+                            <div class="wizard wizard-success mb-4">
+                                <form th:method="post" th:action="@{/reports/add}"
+                                th:object="${report}">
 
-                            <form th:method="post" th:action="@{/reports/add}" th:object="${report}">
-                                <div class="wizard wizard-success mb-4">
 
                                     <div class="mb-3">
                                         <label class="form-label" for="code">日付</label>
@@ -33,45 +34,48 @@
                                         </div>
                                     </div>
 
-                                    <div class="mb-3">
-                                        <label class="form-label" for="name">氏名</label>
+                                  <div class="mb-3">
+                                        <label  for="name">氏名</label>
                                         <p class="mb-1"></p>
-                                        <!--  <div class="col-md-7">
-                                          <td class="align-middle" th:text="${report.employee.name}"></td>-->
+                                      <div class="col-md-7">
+                                      <input type="hidden" th:field="${report.employee.code}" >
+                             <p> <span th:text="${username}"></span></p>
 
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label" for="title">タイトル</label>
-                                    <p class="mb-1"></p>
-                                    <div class="col-md-7">
-
-                                        <input class="form-control" type="text" th:field="*{title}" th:errorclass="err">
-                                        <span th:errors="*{title}" class="text-danger"></span>
-
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label" for="contens">内容</label>
-                                        <p class="mb-1"></p>
-                                        <div class="col-md-7">
-                                        <textarea rows="10" cols="60" class="form-control" type="text" th:field="*{content}"
-                                            th:errorclass="err"></textarea>
-
-                                            <span th:errors="*{content}" class="text-danger"></span>
                                         </div>
                                     </div>
-                                </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label" for="title">タイトル</label>
+                                        <p class="mb-1"></p>
+                                        <div class="col-md-7">
+
+                                            <input class="form-control" type="text" th:field="*{title}"
+                                                th:errorclass="err">
+                                            <span th:errors="*{title}" class="text-danger"></span>
+
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="contens">内容</label>
+                                            <p class="mb-1"></p>
+                                            <div class="col-md-7">
+                                                <textarea rows="10" cols="60" class="form-control" type="text"
+                                                    th:field="*{content}" th:errorclass="err"></textarea>
+
+                                                <span th:errors="*{content}" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            <p class="mt-5">
+                                <input type="submit" value="登録" class="btn btn-primary">
+                                <a th:href="@{/reports}" class="btn btn-primary">戻る</a>
+                            </p>
+                            </form>
                         </div>
-                        <p class="mt-5">
-                            <input type="submit" value="登録" class="btn btn-primary">
-                            <a th:href="@{/reports}" class="btn btn-primary">戻る</a>
-                        </p>
-                        </form>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </body>
 

@@ -27,16 +27,16 @@ public class ReportService {
 
     // 日報保存
     @Transactional
-    public Report save(Report report) {
-        return reportRepository.save(report);
+    public ErrorKinds save(Report report,UserDetail userDetail) {
+        report.setDeleteFlg(false);
 
-        /*
-         * public ErrorKinds save(Report report) { report.setDeleteFlg(false);
-         *
-         * LocalDateTime now = LocalDateTime.now(); report.setCreatedAt(now);
-         * report.setUpdatedAt(now); reportRepository.save(report); return
-         * ErrorKinds.SUCCESS;
-         */
+        LocalDateTime now = LocalDateTime.now();
+        report.setCreatedAt(now);
+        report.setUpdatedAt(now);
+
+        reportRepository.save(report);
+        return ErrorKinds.SUCCESS;
+
     }
 
     // 日報削除
@@ -53,16 +53,17 @@ public class ReportService {
 
     // 日報更新
     @Transactional
-    public Report update(Report report) {
-        return reportRepository.save(report);
-        /*
-         * public ErrorKinds update(Report report) { report.setDeleteFlg(false);
-         *
-         * LocalDateTime now = LocalDateTime.now(); report.setCreatedAt(now);
-         * report.setUpdatedAt(now);
-         *
-         * reportRepository.save(report); return ErrorKinds.SUCCESS;
-         */
+    public ErrorKinds update(Report report) {
+
+        report.setDeleteFlg(false);
+
+        LocalDateTime now = LocalDateTime.now();
+        report.setCreatedAt(now);
+        report.setUpdatedAt(now);
+
+        reportRepository.save(report);
+        return ErrorKinds.SUCCESS;
+
     }
 
     // 日報一覧表示処理
@@ -70,7 +71,7 @@ public class ReportService {
         return reportRepository.findAll();
     }
 
-   //更新用
+    // 更新用
     public Report getReport(Integer id) {
         return reportRepository.findById(id).get();
     }
@@ -83,12 +84,16 @@ public class ReportService {
         Report report = option.orElse(null);
         return report;
     }
-
-    /*// ログイン情報取得
-    public Report getLoggedInName() {
-        SecurityContextHolder.getContext().getAuthentication().getName();
-
-        // DB等からユーザ情報を取得する処理
-        return getReport(null);
-    }*/
 }
+
+    /* //ログイン情報取得
+     public ErrorKinds getLoggedInName() {
+     SecurityContextHolder.getContext().getAuthentication().getName();
+
+      // DB等からユーザ情報を取得する処理
+     return save(null);
+     }
+
+
+    }*/
+

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.techacademy.constants.ErrorKinds;
 import com.techacademy.entity.Employee;
+import com.techacademy.entity.Report;
 import com.techacademy.repository.EmployeeRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +21,13 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ReportService reportService;
 
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder) {
+    public EmployeeService(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder, ReportService reportService) {
         this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder;
+        this.reportService = reportService;
     }
 
     // 従業員保存
@@ -68,6 +71,13 @@ public class EmployeeService {
         LocalDateTime now = LocalDateTime.now();
         employee.setUpdatedAt(now);
         employee.setDeleteFlg(true);
+
+
+        //追記
+        List<Report> reportList = reportService.findAll();
+        for (Report report : reportList) {
+            reportService.delete(report.getId(), userDetail);
+        }
 
         return ErrorKinds.SUCCESS;
     }
