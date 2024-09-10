@@ -25,9 +25,13 @@ public class ReportService {
         this.reportRepository = reportrepository;
     }
 
+    public List<Report> findByEmployee(Employee employee) {
+        return reportRepository.findByEmployee(employee);
+    }
+
 
     @Transactional
-    public ErrorKinds save(Report report,String employee,UserDetail userDetail) {
+    public ErrorKinds save(Report report,UserDetail userDetail,String employee) {
         report.setDeleteFlg(false);
 
         LocalDateTime now = LocalDateTime.now();
@@ -54,6 +58,7 @@ public class ReportService {
         return ErrorKinds.SUCCESS;
 
     }
+
 
     // 日報更新
     @Transactional
@@ -90,14 +95,6 @@ public class ReportService {
     }
 }
 
-    /* //ログイン情報取得
-     public ErrorKinds getLoggedInName() {
-     SecurityContextHolder.getContext().getAuthentication().getName();
-
-      // DB等からユーザ情報を取得する処理
-     return save(null);
-     }
 
 
-    }*/
 

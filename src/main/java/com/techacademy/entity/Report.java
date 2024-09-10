@@ -26,23 +26,23 @@ import lombok.Data;
 @SQLRestriction("delete_flg = false")
 public class Report {
 
+   public void setName(String userName) {
+
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     @NotNull
     private Integer id;
 
-
-
-   // private String name;
+    // private String name;
 
     @ManyToOne
-    @NotNull
     @JoinColumn(name = "employee_code", referencedColumnName = "code", nullable = false)
     private Employee employee;
 
-
-  //日付
+    // 日付
     @Column(nullable = false)
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -60,23 +60,18 @@ public class Report {
     @Size(max = 600)
     private String content;
 
- // 削除フラグ(論理削除を行うため)
+    // 削除フラグ(論理削除を行うため)
 
     @Column(columnDefinition = "TINYINT", nullable = false)
     private boolean deleteFlg;
 
-  //登録日時
+    // 登録日時
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
- // 更新日時
+    // 更新日時
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    public void setName(String userName) {
-        // TODO 自動生成されたメソッド・スタブ
-
-    }
-
-    }
+}

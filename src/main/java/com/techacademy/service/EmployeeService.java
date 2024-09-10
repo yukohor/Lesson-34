@@ -72,15 +72,18 @@ public class EmployeeService {
         employee.setUpdatedAt(now);
         employee.setDeleteFlg(true);
 
-
-        //追記
-        List<Report> reportList = reportService.findAll();
-        for (Report report : reportList) {
-            reportService.delete(report.getId(), userDetail);
+        List<Report> reports = reportService.findByEmployee(employee); // 従業員に紐づく日報情報を取得
+        for (Report report : reports) {
+            reportService.delete(report.getId(), userDetail); // 日報情報を削除
         }
+
+        employeeRepository.save(employee);
+
+
 
         return ErrorKinds.SUCCESS;
     }
+
 
     //従業員更新
     @Transactional

@@ -56,6 +56,7 @@ public class ReportController {
     public String create(@ModelAttribute Report report, @AuthenticationPrincipal UserDetail userDetail, Model model) {
 
         model.addAttribute("employeeName", userDetail.getEmployee().getName());
+        model.addAttribute("report", report);
         return "reports/new";
     }
 
@@ -63,13 +64,16 @@ public class ReportController {
     public String add(@ModelAttribute @Validated Report report, BindingResult res, Model model,
             @AuthenticationPrincipal UserDetail userDetail) {
         if (res.hasErrors()) {
+            model.addAttribute("report", report);
             return create(report, userDetail, model);
         }
 
-        //追加
        String employee = userDetail.getUsername();
-        reportService.save(report,employee, userDetail);
+
+        reportService.save(report, userDetail, employee);
       return "redirect:/reports";
+
+
     }
 
     // 日報削除処理
