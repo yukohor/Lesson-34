@@ -25,14 +25,18 @@ public class ReportService {
         this.reportRepository = reportrepository;
     }
 
-    // 日報保存
+
     @Transactional
-    public ErrorKinds save(Report report,UserDetail userDetail) {
+    public ErrorKinds save(Report report,String employee,UserDetail userDetail) {
         report.setDeleteFlg(false);
 
         LocalDateTime now = LocalDateTime.now();
         report.setCreatedAt(now);
         report.setUpdatedAt(now);
+
+        report.setName(employee);
+
+
 
         reportRepository.save(report);
         return ErrorKinds.SUCCESS;

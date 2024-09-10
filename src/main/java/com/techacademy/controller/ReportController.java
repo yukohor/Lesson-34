@@ -53,48 +53,51 @@ public class ReportController {
 
     // 日報新規登録画面
     @GetMapping(value = "/add")
-    public String create(@ModelAttribute Report report,@AuthenticationPrincipal UserDetail userDetail,Model model) {
-        model.addAttribute("username", userDetail.getUsername());
+    public String create(@ModelAttribute Report report, @AuthenticationPrincipal UserDetail userDetail, Model model) {
+
+        model.addAttribute("employeeName", userDetail.getEmployee().getName());
         return "reports/new";
     }
 
     @PostMapping(value = "/add")
-    public String add(@Validated Report report, BindingResult res, Model model,UserDetail userDetail) {
+    public String add(@ModelAttribute @Validated Report report, BindingResult res, Model model,
+            @AuthenticationPrincipal UserDetail userDetail) {
         if (res.hasErrors()) {
-            return create(report, null,model);
+            return create(report, userDetail, model);
         }
 
-        reportService.save(report,userDetail);
-
-        return "redirect:/reports";
+        //追加
+       String employee = userDetail.getUsername();
+        reportService.save(report,employee, userDetail);
+      return "redirect:/reports";
     }
 
     // 日報削除処理
 
-     @PostMapping(value = "/{id}/delete")
-     public String delete(@PathVariable Integer id, @AuthenticationPrincipal UserDetail userDetail, Model model) {
+    @PostMapping(value = "/{id}/delete")
+    public String delete(@PathVariable Integer id, @AuthenticationPrincipal UserDetail userDetail, Model model) {
 
-         ErrorKinds result = reportService.delete(id, userDetail);
+        ErrorKinds result = reportService.delete(id, userDetail);
 
-         if (ErrorMessage.contains(result)) {
-             model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
-             model.addAttribute("report", reportService.findById(id));
-             return detail(id, model);
-         }
+        if (ErrorMessage.contains(result)) {
+            model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
+            model.addAttribute("report", reportService.findById(id));
+            return detail(id, model);
+        }
 
-         return "redirect:/reports";
-     }
+        return "redirect:/reports";
+    }
 
     // 日報更新処理 画面遷移
     @GetMapping(value = "/{id}/update")
-    public String getReport(@PathVariable("id") Integer id, Model model,Report report) {
-    if (id == null) {
+    public String getReport(@PathVariable("id") Integer id, Model model, Report report) {
+        if (id == null) {
             model.addAttribute("report", report);
             return "reports/update";
         }
-            model.addAttribute("report", reportService.getReport(id));
-            return "reports/update";
-        }
+        model.addAttribute("report", reportService.getReport(id));
+        return "reports/update";
+    }
 
     @PostMapping("/{id}/update")
     public String postReport(@Validated Report report, BindingResult res, Model model) {

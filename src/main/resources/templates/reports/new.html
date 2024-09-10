@@ -20,8 +20,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="wizard wizard-success mb-4">
-                                <form th:method="post" th:action="@{/reports/add}"
-                                th:object="${report}">
+                                <form th:method="post" th:action="@{/reports/add}" th:object="${report}">
 
 
                                     <div class="mb-3">
@@ -34,12 +33,12 @@
                                         </div>
                                     </div>
 
-                                  <div class="mb-3">
-                                        <label  for="name">氏名</label>
+                                    <div class="mb-3">
+                                        <label for="name">氏名</label>
                                         <p class="mb-1"></p>
-                                      <div class="col-md-7">
-                                      <input type="hidden" th:field="${report.employee.code}" >
-                             <p> <span th:text="${username}"></span></p>
+                                        <div class="col-md-7">
+                                            <input type="hidden" th:field="${report.employee.code}">
+                                            <p> <span th:text="${employeeName}"></span></p>
 
                                         </div>
                                     </div>

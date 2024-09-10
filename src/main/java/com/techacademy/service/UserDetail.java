@@ -41,7 +41,7 @@ public class UserDetail implements UserDetails {
 //変更した
     @Override
     public String getUsername() {
-        return employee.getName();
+        return employee.getCode();
     }
 
     @Override

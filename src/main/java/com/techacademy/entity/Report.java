@@ -33,11 +33,13 @@ public class Report {
     private Integer id;
 
 
+
+   // private String name;
+
     @ManyToOne
     @NotNull
     @JoinColumn(name = "employee_code", referencedColumnName = "code", nullable = false)
     private Employee employee;
-
 
 
   //日付
@@ -71,5 +73,10 @@ public class Report {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    public void setName(String userName) {
+        // TODO 自動生成されたメソッド・スタブ
+
+    }
 
     }
