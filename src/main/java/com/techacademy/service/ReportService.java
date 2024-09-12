@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.techacademy.constants.ErrorKinds;
 import com.techacademy.entity.Employee;
 import com.techacademy.entity.Report;
+import com.techacademy.repository.EmployeeRepository;
 import com.techacademy.repository.ReportRepository;
 
 @Service
@@ -29,22 +31,17 @@ public class ReportService {
         return reportRepository.findByEmployee(employee);
     }
 
-
+     //新規
     @Transactional
-    public ErrorKinds save(Report report,UserDetail userDetail,String employee) {
-        report.setDeleteFlg(false);
+    public Report save(Report report, Employee employee) {
+        Optional<Report> existingReport = reportRepository.findByEmployeeAndReportDate(employee,
+                report.getReportDate());
+        if (existingReport.isPresent()) {
+            throw new DataIntegrityViolationException("この日付の日報は既に存在します。");
+        }
 
-        LocalDateTime now = LocalDateTime.now();
-        report.setCreatedAt(now);
-        report.setUpdatedAt(now);
-
-        report.setName(employee);
-
-
-
-        reportRepository.save(report);
-        return ErrorKinds.SUCCESS;
-
+        report.setEmployee(employee);
+        return reportRepository.save(report);
     }
 
     // 日報削除
@@ -58,7 +55,6 @@ public class ReportService {
         return ErrorKinds.SUCCESS;
 
     }
-
 
     // 日報更新
     @Transactional
@@ -94,7 +90,3 @@ public class ReportService {
         return report;
     }
 }
-
-
-
-

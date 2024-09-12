@@ -26,17 +26,9 @@ import lombok.Data;
 @SQLRestriction("delete_flg = false")
 public class Report {
 
-   public void setName(String userName) {
-
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    @NotNull
     private Integer id;
-
-    // private String name;
 
     @ManyToOne
     @JoinColumn(name = "employee_code", referencedColumnName = "code", nullable = false)
@@ -48,30 +40,26 @@ public class Report {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate reportDate;
 
-//タイトル
+    // タイトル
     @Column(nullable = false)
     @NotEmpty
     @Length(max = 100)
     private String title;
 
-//内容
-    @Column(columnDefinition = "LONGTEXT", nullable = false)
+    // 内容
+    @Column(columnDefinition = "LONGTEXT")
     @NotEmpty
     @Size(max = 600)
     private String content;
 
     // 削除フラグ(論理削除を行うため)
-
     @Column(columnDefinition = "TINYINT", nullable = false)
-    private boolean deleteFlg;
+    private boolean deleteFlg = false;
 
     // 登録日時
-    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     // 更新日時
-
-    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
 }

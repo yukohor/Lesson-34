@@ -4,6 +4,7 @@ package com.techacademy.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.validator.constraints.Length;
@@ -14,8 +15,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -25,8 +28,8 @@ import lombok.Data;
 @Entity
 @Table(name = "employees")
 @SQLRestriction("delete_flg = false")
-public class Employee {
 
+public class Employee {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Report> reportList;
 
@@ -51,8 +54,6 @@ public class Employee {
     @Length(max = 10)
     private String code;
 
-
-
     // 名前
     @Column(length = 20, nullable = false)
     @NotEmpty
@@ -60,7 +61,7 @@ public class Employee {
     private String name;
 
     // 権限
-    @Column(columnDefinition="VARCHAR(10)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -69,7 +70,7 @@ public class Employee {
     private String password;
 
     // 削除フラグ(論理削除を行うため)
-    @Column(columnDefinition="TINYINT", nullable = false)
+    @Column(columnDefinition = "TINYINT", nullable = false)
     private boolean deleteFlg;
 
     // 登録日時

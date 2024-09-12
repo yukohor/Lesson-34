@@ -1,5 +1,6 @@
 package com.techacademy.controller;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,27 +55,33 @@ public class ReportController {
     // 日報新規登録画面
     @GetMapping(value = "/add")
     public String create(@ModelAttribute Report report, @AuthenticationPrincipal UserDetail userDetail, Model model) {
+        Employee employee = userDetail.getEmployee();
+        String employeeName = employee.getName();
 
-        model.addAttribute("employeeName", userDetail.getEmployee().getName());
-        model.addAttribute("report", report);
+        model.addAttribute("employeeName", employeeName);
         return "reports/new";
     }
 
     @PostMapping(value = "/add")
-    public String add(@ModelAttribute @Validated Report report, BindingResult res, Model model,
-            @AuthenticationPrincipal UserDetail userDetail) {
+    public String add(@ModelAttribute @Validated Report report, BindingResult res,
+            @AuthenticationPrincipal UserDetail userDetail, Model model) {
         if (res.hasErrors()) {
-            model.addAttribute("report", report);
-            return create(report, userDetail, model);
+            return "reports/new";
         }
 
-       String employee = userDetail.getUsername();
+        Employee employee = userDetail.getEmployee();
 
-        reportService.save(report, userDetail, employee);
-      return "redirect:/reports";
+        try {
+            reportService.save(report, employee);
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("errorMessage", "既に登録されている日付です");
+            return "reports/new";
+        }
 
-
+        return "redirect:/reports";
     }
+
+
 
     // 日報削除処理
 
