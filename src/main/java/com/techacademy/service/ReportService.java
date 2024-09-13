@@ -33,16 +33,19 @@ public class ReportService {
 
      //新規
     @Transactional
-    public Report save(Report report, Employee employee) {
-        Optional<Report> existingReport = reportRepository.findByEmployeeAndReportDate(employee,
-                report.getReportDate());
+    public Optional<String> save(Report report, Employee employee) {
+        Optional<Report> existingReport = reportRepository.findByEmployeeAndReportDate(employee, report.getReportDate());
+
         if (existingReport.isPresent()) {
-            throw new DataIntegrityViolationException("この日付の日報は既に存在します。");
+            return Optional.of("この日付の日報は既に存在します。");
         }
 
         report.setEmployee(employee);
-        return reportRepository.save(report);
+        reportRepository.save(report);
+
+        return Optional.empty();
     }
+
 
     // 日報削除
     @Transactional

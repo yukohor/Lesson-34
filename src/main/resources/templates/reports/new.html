@@ -20,8 +20,8 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="wizard wizard-success mb-4">
-                                <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
-                                    <span th:text="${errorMessage}"></span>
+                                <div th:if="${errorMessage}" class="text-danger">
+                                    <p th:text="${errorMessage}"></p>
                                 </div>
                                 <form th:method="post" th:action="@{/reports/add}" th:object="${report}">
                                     <div class="mb-3">

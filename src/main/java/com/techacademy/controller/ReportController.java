@@ -1,6 +1,7 @@
 package com.techacademy.controller;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,21 +67,19 @@ public class ReportController {
     public String add(@ModelAttribute @Validated Report report, BindingResult res,
             @AuthenticationPrincipal UserDetail userDetail, Model model) {
         if (res.hasErrors()) {
-            return "reports/new";
+            return create(report, userDetail, model);
         }
 
         Employee employee = userDetail.getEmployee();
 
-        try {
-            reportService.save(report, employee);
-        } catch (DataIntegrityViolationException e) {
-            model.addAttribute("errorMessage", "既に登録されている日付です");
+        Optional<String> errorMessage = reportService.save(report, employee);
+
+        if (errorMessage.isPresent()) {
+            model.addAttribute("errorMessage", errorMessage.get());
             return "reports/new";
         }
-
         return "redirect:/reports";
     }
-
 
 
     // 日報削除処理
