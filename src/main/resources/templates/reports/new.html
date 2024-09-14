@@ -20,9 +20,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="wizard wizard-success mb-4">
-                                <div th:if="${errorMessage}" class="text-danger">
-                                    <p th:text="${errorMessage}"></p>
-                                </div>
+
                                 <form th:method="post" th:action="@{/reports/add}" th:object="${report}">
                                     <div class="mb-3">
                                         <label class="form-label" for="code">日付</label>
@@ -32,6 +30,9 @@
                                                 th:errorclass="err">
                                             <span th:errors="*{reportDate}" class="text-danger"></span>
                                         </div>
+                                         <div th:if="${errorMessage}" class="text-danger">
+                                    <p th:text="${errorMessage}"></p>
+                                </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="name">氏名</label>

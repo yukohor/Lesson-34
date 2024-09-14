@@ -37,7 +37,7 @@ public class ReportService {
         Optional<Report> existingReport = reportRepository.findByEmployeeAndReportDate(employee, report.getReportDate());
 
         if (existingReport.isPresent()) {
-            return Optional.of("この日付の日報は既に存在します。");
+            return Optional.of("既に登録されている日付です");
         }
 
         report.setEmployee(employee);
@@ -61,17 +61,18 @@ public class ReportService {
 
     // 日報更新
     @Transactional
-    public ErrorKinds update(Report report) {
+    public Optional<String> update(Report report) {
+        Optional<Report> existingReport = reportRepository.findByEmployeeAndReportDate(report.getEmployee(), report.getReportDate());
+
+        if (existingReport.isPresent() && !existingReport.get().getId().equals(report.getId())) {
+            return Optional.of("既に登録されている日付です");
+        }
 
         report.setDeleteFlg(false);
-
-        LocalDateTime now = LocalDateTime.now();
-        report.setCreatedAt(now);
-        report.setUpdatedAt(now);
+        report.setUpdatedAt(LocalDateTime.now());
 
         reportRepository.save(report);
-        return ErrorKinds.SUCCESS;
-
+        return Optional.empty();
     }
 
     // 日報一覧表示処理

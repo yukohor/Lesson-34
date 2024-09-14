@@ -109,12 +109,20 @@ public class ReportController {
         return "reports/update";
     }
 
+
     @PostMapping("/{id}/update")
     public String postReport(@Validated Report report, BindingResult res, Model model) {
         if (res.hasErrors()) {
+            return getReport(report.getId(), model, report);
+        }
+
+        Optional<String> errorMessage = reportService.update(report);
+
+        if (errorMessage.isPresent()) {
+            model.addAttribute("errorMessage", errorMessage.get());
             return getReport(null, model, report);
         }
-        reportService.update(report);
+
         return "redirect:/reports";
     }
 }
